@@ -39,25 +39,27 @@ function Field({ label, icon: Icon, children }) {
 }
 
 // Member card OUTSIDE component — stable reference prevents unnecessary re-mounts
-function MemberCard({ member, onEdit, onDelete }) {
+function MemberCard({ member, onEdit, onDelete, isAdmin }) {
   return (
     <div className="card group hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${avatarColor(member.name)} flex items-center justify-center text-white font-bold text-lg shadow-md`}>
           {member.name?.charAt(0)?.toUpperCase()}
         </div>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onClick={() => onEdit(member)} className="btn-icon" title="Edit">
-            <Pencil size={14} />
-          </button>
-          <button
-            onClick={() => onDelete(member.id)}
-            className="btn-icon text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-            title="Delete"
-          >
-            <Trash2 size={14} />
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onClick={() => onEdit(member)} className="btn-icon" title="Edit">
+              <Pencil size={14} />
+            </button>
+            <button
+              onClick={() => onDelete(member.id)}
+              className="btn-icon text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+              title="Delete"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        )}
       </div>
       <div>
         <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{member.name}</p>
@@ -92,6 +94,11 @@ export default function TeamMembers() {
   const [search,    setSearch]    = useState('');
   const [deleteId,  setDeleteId]  = useState(null);
   const [saved,     setSaved]     = useState(false);
+
+  // Check if current user is an admin
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = currentUser.role === 'admin' || currentUser.email === 'admin@smartdatainc.net' || !currentUser.role && currentUser.email;
+
 
   const set = (f) => (e) => setForm((p) => ({ ...p, [f]: e.target.value }));
 
@@ -156,9 +163,11 @@ export default function TeamMembers() {
             <p className="text-sm text-slate-500">{members.length} member{members.length !== 1 ? 's' : ''} registered</p>
           </div>
         </div>
-        <button onClick={openAdd} className="btn-primary">
-          <Plus size={16} /> Add Member
-        </button>
+        {isAdmin && (
+          <button onClick={openAdd} className="btn-primary">
+            <Plus size={16} /> Add Member
+          </button>
+        )}
       </div>
 
       {/* Search bar */}
@@ -186,8 +195,9 @@ export default function TeamMembers() {
             <MemberCard
               key={m.id}
               member={m}
-              onEdit={openEdit}
-              onDelete={setDeleteId}
+              onEdit={isAdmin ? openEdit : () => {}}
+              onDelete={isAdmin ? setDeleteId : () => {}}
+              isAdmin={isAdmin}
             />
           ))}
         </div>
