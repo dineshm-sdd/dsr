@@ -140,7 +140,7 @@
       "role": "Associate",
       "department": "Engineering",
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "password": "",
+      "password": "12345678",
       "updatedAt": "2026-06-15T06:35:27.878Z"
     },
     {
@@ -150,7 +150,7 @@
       "role": "Associate",
       "department": "Engineering",
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "password": "",
+      "password": "12345678",
       "updatedAt": "2026-06-16T10:23:49.373Z"
     },
     {
@@ -160,7 +160,7 @@
       "role": "Associate",
       "department": "Engineering",
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "password": "",
+      "password": "12345678",
       "updatedAt": "2026-06-15T06:35:18.908Z"
     },
     {
