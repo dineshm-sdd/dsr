@@ -1,0 +1,213 @@
+{
+  "entries": [
+    {
+      "memberName": "Dinesh",
+      "project": "Clinova Solutions",
+      "taskDuration": "1 days",
+      "status": "Completed",
+      "timeSpent": "1 hr",
+      "billing": "20.00",
+      "billingType": "Billable",
+      "workDescription": "client asked the hero section heading to move up",
+      "date": "2026-06-12",
+      "id": "CClaQemVauM",
+      "createdAt": "2026-06-12T06:00:53.527Z"
+    },
+    {
+      "memberName": "Dinesh",
+      "project": "Internal",
+      "taskDuration": "1",
+      "status": "Completed",
+      "timeSpent": "7 hrs",
+      "billing": "0",
+      "billingType": "Non-Billable",
+      "workDescription": "Work on DSR task",
+      "date": "2026-06-12",
+      "id": "SW2f2bKwT74",
+      "createdAt": "2026-06-12T06:13:49.573Z"
+    },
+    {
+      "memberName": "Himanshu Bhatt",
+      "project": "Continuity Connect",
+      "taskDuration": "16 hrs",
+      "status": "In Progress",
+      "timeSpent": "8 hrs",
+      "billing": "0",
+      "billingType": "Non-Billable",
+      "workDescription": "- Task to create mobile app",
+      "date": "2026-06-15",
+      "id": "jh6JGSApaoc",
+      "createdAt": "2026-06-15T12:51:00.734Z"
+    },
+    {
+      "memberName": "Dinesh",
+      "project": "Continuity Connect",
+      "taskDuration": "24 hrs",
+      "status": "In Progress",
+      "timeSpent": "8 hrs",
+      "billing": "0",
+      "billingType": "Non-Billable",
+      "workDescription": "- R&D in new functionality",
+      "date": "2026-06-15",
+      "id": "NkdYHi18XDI",
+      "createdAt": "2026-06-15T12:52:14.285Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "11111111-0001-0001-0001-000000000001",
+      "name": "Project Alpha",
+      "client": "Client A",
+      "billingRate": 1500,
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "description": "Sample project Alpha",
+      "status": "Active",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "11111111-0001-0001-0001-000000000002",
+      "name": "Project Beta",
+      "client": "Client B",
+      "billingRate": 2000,
+      "startDate": "2025-03-01",
+      "endDate": "2025-09-30",
+      "description": "Sample project Beta",
+      "status": "Active",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "11111111-0001-0001-0001-000000000003",
+      "name": "Internal",
+      "client": "Internal",
+      "billingRate": 0,
+      "startDate": "2025-01-01",
+      "endDate": "",
+      "description": "Internal tasks",
+      "status": "Active",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "11111111-0001-0001-0001-000000000004",
+      "name": "Support",
+      "client": "Support",
+      "billingRate": 0,
+      "startDate": "2025-01-01",
+      "endDate": "",
+      "description": "Support tasks",
+      "status": "Active",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "name": "Florida Wellness EMR",
+      "client": "Farar Duro",
+      "billingRate": 0,
+      "startDate": "2026-04-12",
+      "endDate": "2026-05-12",
+      "description": "Design Admin panel",
+      "status": "Completed",
+      "id": "JOgIzO91u2g",
+      "createdAt": "2026-06-12T05:46:29.072Z"
+    },
+    {
+      "name": "Clinova Solutions",
+      "client": "Jasmine Bonder",
+      "billingRate": 20,
+      "startDate": "2026-02-12",
+      "endDate": "",
+      "description": "Healthcare",
+      "status": "Active",
+      "id": "JyHsaRm7j5g",
+      "createdAt": "2026-06-12T05:58:50.928Z"
+    },
+    {
+      "name": "Continuity Connect",
+      "client": "Suraj Kandel",
+      "billingRate": 0,
+      "startDate": "2025-04-01",
+      "endDate": "2026-08-01",
+      "description": "HealthCare",
+      "status": "Active",
+      "id": "oUhlKZKsFyw",
+      "createdAt": "2026-06-15T12:50:06.329Z"
+    }
+  ],
+  "members": [
+    {
+      "id": "22222222-0002-0002-0002-000000000001",
+      "name": "Deep Jaswal",
+      "email": "deepjaswal@smartdatainc.net",
+      "role": "Associate",
+      "department": "Engineering",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "password": "",
+      "updatedAt": "2026-06-15T06:35:27.878Z"
+    },
+    {
+      "id": "22222222-0002-0002-0002-000000000002",
+      "name": "Mohit Kainth",
+      "email": "mohitkainth@smartdatainc.net",
+      "role": "Associate",
+      "department": "Engineering",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "password": "",
+      "updatedAt": "2026-06-15T06:34:42.787Z"
+    },
+    {
+      "id": "22222222-0002-0002-0002-000000000003",
+      "name": "Himanshu Bhatt",
+      "email": "himanshubhatt@smartdatainc.net",
+      "role": "Associate",
+      "department": "Engineering",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "password": "",
+      "updatedAt": "2026-06-15T06:35:18.908Z"
+    },
+    {
+      "name": "Dinesh",
+      "email": "dineshmamgain@smartdatainc.net",
+      "password": "12345678",
+      "role": "Sr. Associate",
+      "department": "Engineering",
+      "id": "-mbJcd6CgQo",
+      "createdAt": "2026-06-12T05:59:30.600Z"
+    },
+    {
+      "name": "Yashpal Chaudhary",
+      "email": "yashpalchaudhary@smartdatainc.net",
+      "password": "12345678",
+      "role": "Associate",
+      "department": "Engineering",
+      "id": "gmNNrYsWjlg",
+      "createdAt": "2026-06-15T06:36:28.375Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "-mbJcd6CgQo",
+      "email": "dineshmamgain@smartdatainc.net",
+      "password": "12345678"
+    },
+    {
+      "id": "22222222-0002-0002-0002-000000000001",
+      "email": "deepjaswal@smartdatainc.net",
+      "password": "12345678"
+    },
+    {
+      "id": "22222222-0002-0002-0002-000000000003",
+      "email": "himanshubhatt@smartdatainc.net",
+      "password": "12345678"
+    },
+    {
+      "id": "22222222-0002-0002-0002-000000000002",
+      "email": "mohitkainth@smartdatainc.net",
+      "password": "12345678"
+    },
+    {
+      "id": "gmNNrYsWjlg",
+      "email": "yashpalchaudhary@smartdatainc.net",
+      "password": "12345678"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
