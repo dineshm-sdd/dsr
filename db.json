@@ -180,33 +180,22 @@
       "department": "Engineering",
       "id": "gmNNrYsWjlg",
       "createdAt": "2026-06-15T06:36:28.375Z"
+    },
+    {
+      "name": "Lovepreet",
+      "email": "lovepreetsingh@smartdatainc.net",
+      "password": "12345678",
+      "role": "Designer",
+      "department": "Engineering",
+      "id": "ogmPMg7-iHU",
+      "createdAt": "2026-06-16T09:57:23.123Z"
     }
   ],
   "users": [
     {
-      "id": "-mbJcd6CgQo",
-      "email": "dineshmamgain@smartdatainc.net",
-      "password": "12345678"
-    },
-    {
-      "id": "22222222-0002-0002-0002-000000000001",
-      "email": "deepjaswal@smartdatainc.net",
-      "password": "12345678"
-    },
-    {
-      "id": "22222222-0002-0002-0002-000000000003",
-      "email": "himanshubhatt@smartdatainc.net",
-      "password": "12345678"
-    },
-    {
-      "id": "22222222-0002-0002-0002-000000000002",
-      "email": "mohitkainth@smartdatainc.net",
-      "password": "12345678"
-    },
-    {
-      "id": "gmNNrYsWjlg",
-      "email": "yashpalchaudhary@smartdatainc.net",
-      "password": "12345678"
+      "id": "22222222-0000-0000-0000-000000000000",
+      "email": "admin@smartdatainc.net",
+      "password": "password"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
