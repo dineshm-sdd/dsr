@@ -23,6 +23,7 @@ export default function Login() {
       if (users.length > 0) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify(users[0]));
+        window.dispatchEvent(new Event('userLogin'));
         navigate('/');
       } else {
         const memberRes = await fetch(`http://localhost:3001/members?email=${email}&password=${password}`);
@@ -31,7 +32,8 @@ export default function Login() {
         if (members.length > 0) {
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('user', JSON.stringify(members[0]));
-          navigate('/');
+          window.dispatchEvent(new Event('userLogin'));
+        navigate('/');
         } else {
           // Check local db.json just in case json-server is running but out of sync
           checkLocalFallback();
@@ -50,10 +52,12 @@ export default function Login() {
     if (user) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ name: 'Admin User', designation: 'Administrator', email: user.email, role: 'admin' }));
+      window.dispatchEvent(new Event('userLogin'));
       navigate('/');
     } else if (member) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ name: member.name, designation: member.role || 'Member', email: member.email, role: member.role }));
+      window.dispatchEvent(new Event('userLogin'));
       navigate('/');
     } else {
       setError('Invalid email or password.');

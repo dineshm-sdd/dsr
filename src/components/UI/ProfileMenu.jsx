@@ -10,9 +10,8 @@ export default function ProfileMenu() {
     email: ""
   });
 
-  useEffect(() => {
+  const loadUser = () => {
     const storedUser = localStorage.getItem('user');
-    console.log("Retrieved user from local storage:", storedUser);
     if (storedUser) {
       try {
         const parsed = JSON.parse(storedUser);
@@ -26,6 +25,12 @@ export default function ProfileMenu() {
         console.error("Failed to parse user from local storage", e);
       }
     }
+  };
+
+  useEffect(() => {
+    loadUser();
+    window.addEventListener('userLogin', loadUser);
+    return () => window.removeEventListener('userLogin', loadUser);
   }, []);
 
   const getInitials = (name = "") => {
