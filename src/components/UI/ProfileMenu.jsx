@@ -16,13 +16,12 @@ export default function ProfileMenu() {
     if (storedUser) {
       try {
         const parsed = JSON.parse(storedUser);
-          setUser({
-            name: parsed?.name ?? "Guest User",
-            designation: parsed?.designation ?? parsed?.role ?? "Visitor",
-            role: parsed?.role ?? parsed?.designation ?? "Member",
-            email: parsed?.email ?? ""
-          });
-        }
+        setUser({
+          name: parsed?.name ?? "Guest User",
+          designation: parsed?.designation ?? parsed?.role ?? "Visitor",
+          role: parsed?.role ?? parsed?.designation ?? "Member",
+          email: parsed?.email ?? ""
+        });
       } catch (e) {
         console.error("Failed to parse user from local storage", e);
       }
