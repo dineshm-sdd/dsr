@@ -10,17 +10,17 @@ import DateRangePicker from '../components/UI/DateRangePicker';
 import SearchableSelect from '../components/UI/SearchableSelect';
 
 const STATUS_COLORS = {
-  'Completed':      'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/60 dark:text-emerald-400 dark:border-emerald-700/40',
-  'In Progress':    'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/60 dark:text-blue-400 dark:border-blue-700/40',
-  'Blocked':        'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/60 dark:text-red-400 dark:border-red-700/40',
-  'On Hold':        'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/60 dark:text-amber-400 dark:border-amber-700/40',
+  'Completed': 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/60 dark:text-emerald-400 dark:border-emerald-700/40',
+  'In Progress': 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/60 dark:text-blue-400 dark:border-blue-700/40',
+  'Blocked': 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/60 dark:text-red-400 dark:border-red-700/40',
+  'On Hold': 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/60 dark:text-amber-400 dark:border-amber-700/40',
   'Review Pending': 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/60 dark:text-purple-400 dark:border-purple-700/40',
 };
 const BILLING_COLORS = {
-  'Billable':     'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/60 dark:text-green-400 dark:border-green-700/40',
+  'Billable': 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/60 dark:text-green-400 dark:border-green-700/40',
   'Non-Billable': 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700/60 dark:text-slate-400 dark:border-slate-600',
-  'Internal':     'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/60 dark:text-indigo-400 dark:border-indigo-700/40',
-  'Support':      'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/60 dark:text-orange-400 dark:border-orange-700/40',
+  'Internal': 'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/60 dark:text-indigo-400 dark:border-indigo-700/40',
+  'Support': 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/60 dark:text-orange-400 dark:border-orange-700/40',
 };
 
 const PAGE_SIZE = 10;
@@ -29,12 +29,12 @@ export default function DSRRecords() {
   const { entries, deleteEntry, projects } = useDSR();
 
   // Filters
-  const [search,      setSearch]      = useState('');
+  const [search, setSearch] = useState('');
   const [projectFilter, setProjectFilter] = useState('');
-  const [startDate,   setStartDate]   = useState(null);
-  const [endDate,     setEndDate]     = useState(null);
-  const [page,        setPage]        = useState(1);
-  const [deleteId,    setDeleteId]    = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [page, setPage] = useState(1);
+  const [deleteId, setDeleteId] = useState(null);
 
   // Feature 10 — project names from CRUD, searchable
   const projectOptions = [
@@ -44,15 +44,15 @@ export default function DSRRecords() {
 
   const filtered = useMemo(() => {
     return entries.filter((e) => {
-      const matchSearch  = !search  || e.memberName?.toLowerCase().includes(search.toLowerCase()) || e.workDescription?.toLowerCase().includes(search.toLowerCase());
+      const matchSearch = !search || e.memberName?.toLowerCase().includes(search.toLowerCase()) || e.workDescription?.toLowerCase().includes(search.toLowerCase());
       const matchProject = !projectFilter || e.project === projectFilter;
-      let   matchDate    = true;
+      let matchDate = true;
       // Feature 9 — date range filter
       if (startDate || endDate) {
         try {
           const entryDate = parseISO(e.date);
           const from = startDate || new Date('1970-01-01');
-          const to   = endDate   || new Date('2099-12-31');
+          const to = endDate || new Date('2099-12-31');
           matchDate = isWithinInterval(entryDate, { start: from, end: to });
         } catch { matchDate = true; }
       }
@@ -61,21 +61,21 @@ export default function DSRRecords() {
   }, [entries, search, projectFilter, startDate, endDate]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const hasFilters = search || projectFilter || startDate || endDate;
-  const clearAll   = () => { setSearch(''); setProjectFilter(''); setStartDate(null); setEndDate(null); setPage(1); };
+  const clearAll = () => { setSearch(''); setProjectFilter(''); setStartDate(null); setEndDate(null); setPage(1); };
 
   const exportCSV = () => {
-    const headers = ['Date','Member','Project','Duration','Time Spent','Status','Billing Type','Billing','Description'];
-    const rows    = filtered.map((e) => [
+    const headers = ['Date', 'Member', 'Project', 'Duration', 'Time Spent', 'Status', 'Billing Type', 'Billing', 'Description'];
+    const rows = filtered.map((e) => [
       e.date, e.memberName, e.project, e.taskDuration, e.timeSpent,
       e.status, e.billingType, e.billing, `"${(e.workDescription || '').replace(/"/g, '""')}"`,
     ]);
-    const csv  = [headers, ...rows].map((r) => r.join(',')).join('\n');
+    const csv = [headers, ...rows].map((r) => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
     a.href = url; a.download = `DSR_${format(new Date(), 'yyyyMMdd')}.csv`;
     a.click(); URL.revokeObjectURL(url);
   };
@@ -136,7 +136,7 @@ export default function DSRRecords() {
             startDate={startDate}
             endDate={endDate}
             onStartChange={(d) => { setStartDate(d); setPage(1); }}
-            onEndChange={(d)   => { setEndDate(d);   setPage(1); }}
+            onEndChange={(d) => { setEndDate(d); setPage(1); }}
             onClear={() => { setStartDate(null); setEndDate(null); setPage(1); }}
           />
         </div>
@@ -160,7 +160,7 @@ export default function DSRRecords() {
             <table className="w-full text-sm">
               <thead>
                 <tr>
-                  {['Date','Member','Project','Duration','Time Spent','Status','Billing Type','Amount','Description',''].map((h) => (
+                  {['Date', 'Member', 'Project', 'Duration', 'Time Spent', 'Status', 'Billing Type', 'Amount', 'Description', ''].map((h) => (
                     <th key={h} className="th">{h}</th>
                   ))}
                 </tr>
@@ -188,7 +188,7 @@ export default function DSRRecords() {
                       </span>
                     </td>
                     <td className="td whitespace-nowrap font-medium text-emerald-600 dark:text-emerald-400">
-                      {entry.billing ? `₹${Number(entry.billing).toLocaleString('en-IN')}` : '—'}
+                      {entry.billing ? `$ ${Number(entry.billing).toLocaleString('en-IN')}` : '—'}
                     </td>
                     <td className="td max-w-xs">
                       <p className="truncate max-w-[180px] text-slate-500 dark:text-slate-400" title={entry.workDescription}>

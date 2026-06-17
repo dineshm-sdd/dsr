@@ -11,10 +11,10 @@ import { format } from 'date-fns';
 import SearchableSelect from '../components/UI/SearchableSelect';
 import DateRangePicker from '../components/UI/DateRangePicker';
 
-const COLORS = ['#4f6bff','#a78bfa','#34d399','#f59e0b','#f87171','#38bdf8','#fb7185'];
+const COLORS = ['#4f6bff', '#a78bfa', '#34d399', '#f59e0b', '#f87171', '#38bdf8', '#fb7185'];
 
 const parseTime = (str = '') => {
-  const hrMatch  = str.match(/(\d+(?:\.\d+)?)\s*h/i);
+  const hrMatch = str.match(/(\d+(?:\.\d+)?)\s*h/i);
   const minMatch = str.match(/(\d+)\s*m/i);
   return (hrMatch ? parseFloat(hrMatch[1]) : 0) + (minMatch ? parseInt(minMatch[1]) / 60 : 0);
 };
@@ -38,8 +38,8 @@ export default function ProjectAnalysis() {
 
   // Feature 11 — searchable project + date range filter
   const [selectedProject, setSelectedProject] = useState('');
-  const [startDate,       setStartDate]       = useState(null);
-  const [endDate,         setEndDate]         = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   // Project options with search
   const projectOptions = [
@@ -51,13 +51,13 @@ export default function ProjectAnalysis() {
   const filtered = useMemo(() => {
     return entries.filter((e) => {
       const matchProject = !selectedProject || e.project === selectedProject;
-      let   matchDate    = true;
+      let matchDate = true;
       if (startDate || endDate) {
         try {
-          const d    = parseISO(e.date);
+          const d = parseISO(e.date);
           const from = startDate || new Date('1970-01-01');
-          const to   = endDate   || new Date('2099-12-31');
-          matchDate  = isWithinInterval(d, { start: from, end: to });
+          const to = endDate || new Date('2099-12-31');
+          matchDate = isWithinInterval(d, { start: from, end: to });
         } catch { matchDate = true; }
       }
       return matchProject && matchDate;
@@ -66,11 +66,11 @@ export default function ProjectAnalysis() {
 
   // KPIs
   const kpis = useMemo(() => {
-    const totalHrs    = filtered.reduce((s, e) => s + parseTime(e.timeSpent), 0);
-    const billable    = filtered.filter((e) => e.billingType === 'Billable');
+    const totalHrs = filtered.reduce((s, e) => s + parseTime(e.timeSpent), 0);
+    const billable = filtered.filter((e) => e.billingType === 'Billable');
     const billableHrs = billable.reduce((s, e) => s + parseTime(e.timeSpent), 0);
-    const totalBill   = billable.reduce((s, e) => s + (parseFloat(e.billing) || 0), 0);
-    const members     = new Set(filtered.map((e) => e.memberName)).size;
+    const totalBill = billable.reduce((s, e) => s + (parseFloat(e.billing) || 0), 0);
+    const members = new Set(filtered.map((e) => e.memberName)).size;
     return { totalHrs, billableHrs, totalBill, members, count: filtered.length };
   }, [filtered]);
 
@@ -81,7 +81,7 @@ export default function ProjectAnalysis() {
       : projects;
     return projectList
       .map((p) => ({
-        name:  p.name,
+        name: p.name,
         hours: filtered.filter((e) => e.project === p.name).reduce((s, e) => s + parseTime(e.timeSpent), 0),
         tasks: filtered.filter((e) => e.project === p.name).length,
       }))
@@ -199,10 +199,10 @@ export default function ProjectAnalysis() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard icon={Clock}      label="Total Hours"    value={`${kpis.totalHrs.toFixed(1)}h`}   sub={`${kpis.billableHrs.toFixed(1)}h billable`}  gradient="from-brand-600 to-brand-700" />
-        <KPICard icon={TrendingUp} label="Total Entries"  value={kpis.count}                        sub="DSR submissions"                              gradient="from-purple-600 to-purple-700" />
-        <KPICard icon={Users}      label="Team Members"   value={kpis.members}                      sub="unique contributors"                          gradient="from-cyan-600 to-cyan-700" />
-        <KPICard icon={DollarSign} label="Billable Value" value={kpis.totalBill ? `₹${kpis.totalBill.toLocaleString('en-IN')}` : '—'} sub="from billable entries" gradient="from-emerald-600 to-emerald-700" />
+        <KPICard icon={Clock} label="Total Hours" value={`${kpis.totalHrs.toFixed(1)}h`} sub={`${kpis.billableHrs.toFixed(1)}h billable`} gradient="from-brand-600 to-brand-700" />
+        <KPICard icon={TrendingUp} label="Total Entries" value={kpis.count} sub="DSR submissions" gradient="from-purple-600 to-purple-700" />
+        <KPICard icon={Users} label="Team Members" value={kpis.members} sub="unique contributors" gradient="from-cyan-600 to-cyan-700" />
+        <KPICard icon={DollarSign} label="Billable Value" value={kpis.totalBill ? `$ ${kpis.totalBill.toLocaleString('en-IN')}` : '—'} sub="from billable entries" gradient="from-emerald-600 to-emerald-700" />
       </div>
 
       {/* Charts Row 1 */}
@@ -216,7 +216,7 @@ export default function ProjectAnalysis() {
                 <XAxis dataKey="name" tick={{ fontSize: 11 }} className="text-slate-500" />
                 <YAxis tick={{ fontSize: 11 }} className="text-slate-500" />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="hours" name="Hours" radius={[6,6,0,0]}>
+                <Bar dataKey="hours" name="Hours" radius={[6, 6, 0, 0]}>
                   {projectHoursData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Bar>
               </BarChart>
@@ -230,7 +230,7 @@ export default function ProjectAnalysis() {
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie data={billingData} cx="50%" cy="50%" innerRadius={55} outerRadius={90} paddingAngle={3} dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent*100).toFixed(0)}%`} labelLine={false}>
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                   {billingData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
@@ -267,7 +267,7 @@ export default function ProjectAnalysis() {
                 <XAxis type="number" tick={{ fontSize: 11 }} />
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={115} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="value" name="Tasks" radius={[0,6,6,0]}>
+                <Bar dataKey="value" name="Tasks" radius={[0, 6, 6, 0]}>
                   {statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Bar>
               </BarChart>
@@ -291,7 +291,7 @@ export default function ProjectAnalysis() {
             <table className="w-full text-sm">
               <thead>
                 <tr>
-                  {['Rank','Member','Tasks','Total Hours','Avg hrs/task'].map((h) => (
+                  {['Rank', 'Member', 'Tasks', 'Total Hours', 'Avg hrs/task'].map((h) => (
                     <th key={h} className="th">{h}</th>
                   ))}
                 </tr>
@@ -300,11 +300,10 @@ export default function ProjectAnalysis() {
                 {memberData.map((m, i) => (
                   <tr key={m.name} className="tr">
                     <td className="td">
-                      <span className={`badge ${
-                        i === 0 ? 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700/40' :
-                        i === 1 ? 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600' :
-                                  'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900/20 dark:text-orange-500 dark:border-orange-700/30'
-                      }`}>#{i+1}</span>
+                      <span className={`badge ${i === 0 ? 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700/40' :
+                          i === 1 ? 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600' :
+                            'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900/20 dark:text-orange-500 dark:border-orange-700/30'
+                        }`}>#{i + 1}</span>
                     </td>
                     <td className="td font-semibold text-slate-800 dark:text-slate-100">{m.name}</td>
                     <td className="td">{m.tasks}</td>

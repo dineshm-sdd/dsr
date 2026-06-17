@@ -56,6 +56,11 @@ export const TIME_SPENT_HOURS = {
 
 // ── EmailJS ─────────────────────────────────────────────────────────────────
 export const EMAILJS_SERVICE_ID = 'service_oyvdetc';
+// export const EMAILJS_GMAIL_SERVICE_ID = 'service_2vzitxo';
 export const EMAILJS_TEMPLATE_ID = 'template_c06sb4o';
+export const EMAILJS_WELCOME_TEMPLATE_ID = 'template_onqqmuf';
 export const EMAILJS_PUBLIC_KEY = 'pSK3aLI2RrCFfJZJE';
-export const COMPANY_EMAIL = 'dineshmamgain@smartdatainc.net';
+export const COMPANY_EMAIL = 'dnes.sdd@gmail.com';
+
+
+

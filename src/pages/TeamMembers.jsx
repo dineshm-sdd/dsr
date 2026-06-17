@@ -6,17 +6,17 @@ import {
   Users, Plus, Pencil, Trash2, Mail, Briefcase, Building2, Search, CheckCircle2,
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import { EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY } from '../data/constants';
+import { EMAILJS_SERVICE_ID, EMAILJS_WELCOME_TEMPLATE_ID, EMAILJS_PUBLIC_KEY } from '../data/constants';
 
 // ─── Helpers defined OUTSIDE component (fix focus-loss bug) ───────────────────
 const EMPTY = { name: '', email: '', password: '', role: '', department: '' };
 
 const ROLE_COLORS = {
-  'Developer':       'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-700/40',
-  'Designer':        'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-700/40',
+  'Developer': 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-700/40',
+  'Designer': 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-700/40',
   'Project Manager': 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700/40',
-  'QA Engineer':     'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-700/40',
-  'DevOps':          'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400 dark:border-cyan-700/40',
+  'QA Engineer': 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-700/40',
+  'DevOps': 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400 dark:border-cyan-700/40',
 };
 
 const AVATAR_COLORS = [
@@ -48,7 +48,7 @@ function MemberCard({ member, onEdit, onDelete, isAdmin }) {
         </div>
         {isAdmin && (
           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={() => onEdit(member)} className="btn-icon" title="Edit">
+            <button onClick={() => onEdit(member)} className="btn-icon text-amber-600 hover:bg-amber-50 dark:text-amber-500 dark:hover:bg-amber-900/20" title="Edit">
               <Pencil size={14} />
             </button>
             <button
@@ -89,11 +89,11 @@ function MemberCard({ member, onEdit, onDelete, isAdmin }) {
 export default function TeamMembers() {
   const { members, addMember, updateMember, deleteMember } = useDSR();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editId,    setEditId]    = useState(null);
-  const [form,      setForm]      = useState(EMPTY);
-  const [search,    setSearch]    = useState('');
-  const [deleteId,  setDeleteId]  = useState(null);
-  const [saved,     setSaved]     = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState(EMPTY);
+  const [search, setSearch] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+  const [saved, setSaved] = useState(false);
 
   // Check if current user is an admin
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -102,7 +102,7 @@ export default function TeamMembers() {
 
   const set = (f) => (e) => setForm((p) => ({ ...p, [f]: e.target.value }));
 
-  const openAdd  = ()  => { setForm(EMPTY); setEditId(null); setModalOpen(true); setSaved(false); };
+  const openAdd = () => { setForm(EMPTY); setEditId(null); setModalOpen(true); setSaved(false); };
   const openEdit = (m) => {
     setForm({ name: m.name, email: m.email || '', password: m.password || '', role: m.role || '', department: m.department || '' });
     setEditId(m.id);
@@ -122,11 +122,11 @@ export default function TeamMembers() {
         try {
           const messageBody = `Welcome ${form.name}!\n\nYou have been added as a team member on the DSR Portal.\nYour login email: ${form.email}\nYour password: ${form.password}\n\nPlease keep this information safe.`;
           await emailjs.send(
-            EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
+            EMAILJS_SERVICE_ID, EMAILJS_WELCOME_TEMPLATE_ID,
             {
-              to_email:         form.email,
-              member_name:      form.name,
-              message:          messageBody,
+              to_email: form.email,
+              member_name: form.name,
+              message: messageBody,
             },
             EMAILJS_PUBLIC_KEY,
           );
@@ -151,7 +151,7 @@ export default function TeamMembers() {
   );
 
   return (
-    <div className="animate-fade-in space-y-6">
+    <div className="animate-fade-in">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -171,7 +171,7 @@ export default function TeamMembers() {
       </div>
 
       {/* Search bar */}
-      <div className="card p-4">
+      <div className="card p-4 my-6">
         <div className="relative max-w-sm">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
@@ -195,8 +195,8 @@ export default function TeamMembers() {
             <MemberCard
               key={m.id}
               member={m}
-              onEdit={isAdmin ? openEdit : () => {}}
-              onDelete={isAdmin ? setDeleteId : () => {}}
+              onEdit={isAdmin ? openEdit : () => { }}
+              onDelete={isAdmin ? setDeleteId : () => { }}
               isAdmin={isAdmin}
             />
           ))}
@@ -244,33 +244,29 @@ export default function TeamMembers() {
             </Field>
 
             <Field label="Role / Designation" icon={Briefcase}>
-              <input
+              <select
                 className="input-field"
-                placeholder="e.g. Developer"
                 value={form.role}
                 onChange={set('role')}
-                list="roles-list-modal"
-              />
-              <datalist id="roles-list-modal">
-                {['Developer','Designer','Project Manager','QA Engineer','DevOps','Business Analyst','Scrum Master'].map((r) => (
-                  <option key={r} value={r} />
+              >
+                <option value="" disabled>Select a role...</option>
+                {['Developer', 'Designer', 'Project Manager', 'QA Engineer', 'DevOps', 'Business Analyst', 'Scrum Master'].map((r) => (
+                  <option key={r} value={r}>{r}</option>
                 ))}
-              </datalist>
+              </select>
             </Field>
 
             <Field label="Department" icon={Building2}>
-              <input
+              <select
                 className="input-field"
-                placeholder="e.g. Engineering"
                 value={form.department}
                 onChange={set('department')}
-                list="dept-list-modal"
-              />
-              <datalist id="dept-list-modal">
-                {['Engineering','Design','Management','QA','DevOps','Sales','Support'].map((d) => (
-                  <option key={d} value={d} />
+              >
+                <option value="" disabled>Select a department...</option>
+                {['Engineering', 'Design', 'Management', 'QA', 'DevOps', 'Sales', 'Support'].map((d) => (
+                  <option key={d} value={d}>{d}</option>
                 ))}
-              </datalist>
+              </select>
             </Field>
           </div>
 
