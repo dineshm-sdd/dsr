@@ -32,19 +32,19 @@ function Field({ label, icon: Icon, required, children, hint }) {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const todayDate = () => new Date();
-const toStr     = (d) => { try { return d ? format(d, 'yyyy-MM-dd') : ''; } catch { return ''; } };
-const toDate    = (s) => { try { return s ? new Date(s + 'T00:00:00') : null; } catch { return null; } };
+const toStr = (d) => { try { return d ? format(d, 'yyyy-MM-dd') : ''; } catch { return ''; } };
+const toDate = (s) => { try { return s ? new Date(s + 'T00:00:00') : null; } catch { return null; } };
 
 const EMPTY = {
-  memberName:      '',
-  project:         '',
-  taskDuration:    '',
-  status:          '',
-  timeSpent:       '',
-  billing:         '',
-  billingType:     '',
+  memberName: '',
+  project: '',
+  taskDuration: '',
+  status: '',
+  timeSpent: '',
+  billing: '',
+  billingType: '',
   workDescription: '',
-  date:            toStr(todayDate()),
+  date: toStr(todayDate()),
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -61,7 +61,7 @@ export default function DSRForm() {
         if (role !== 'admin' && role !== 'administrator') {
           defaultForm.memberName = parsed.name || '';
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     return defaultForm;
   };
@@ -73,27 +73,27 @@ export default function DSRForm() {
         const parsed = JSON.parse(storedUser);
         const role = (parsed?.role || parsed?.designation || "").toLowerCase();
         return role === 'admin' || role === 'administrator';
-      } catch (e) {}
+      } catch (e) { }
     }
     return false;
   });
 
-  const [form,    setForm]    = useState(getInitialForm);
+  const [form, setForm] = useState(getInitialForm);
   const [loading, setLoading] = useState(false);
-  const [toast,   setToast]   = useState(null);
+  const [toast, setToast] = useState(null);
 
-  const set  = (field) => (e)   => setForm((p) => ({ ...p, [field]: e.target.value }));
+  const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
   const setV = (field) => (val) => setForm((p) => ({ ...p, [field]: val }));
 
   // Auto-calculate billing from project rate × time
   useEffect(() => {
     const proj = projects.find((p) => p.name === form.project);
     if (proj && proj.billingRate > 0 && form.timeSpent) {
-      const hrs    = TIME_SPENT_HOURS[form.timeSpent] || 0;
+      const hrs = TIME_SPENT_HOURS[form.timeSpent] || 0;
       const amount = (proj.billingRate * hrs).toFixed(2);
       setForm((p) => ({ ...p, billing: amount }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.project, form.timeSpent]);
 
   // Auto-set billing type from project
@@ -102,7 +102,7 @@ export default function DSRForm() {
     if (proj) {
       setForm((p) => ({ ...p, billingType: proj.billingRate > 0 ? 'Billable' : 'Non-Billable' }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.project]);
 
   const validate = () => {
@@ -127,7 +127,7 @@ Task Duration: ${form.taskDuration}
 Time Spent: ${form.timeSpent}
 Status: ${form.status}
 Billing Type: ${form.billingType}
-Billing Amount: ₹${form.billing || 0}
+Billing Amount: $${form.billing || 0}
 
 Work Description:
 ${form.workDescription}
@@ -160,18 +160,18 @@ ${form.workDescription}
       await emailjs.send(
         EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
         {
-          to_email:         COMPANY_EMAIL,
-          member_name:      form.memberName,
-          project:          form.project,
-          task_duration:    form.taskDuration,
-          status:           form.status,
-          time_spent:       form.timeSpent,
-          billing:          form.billing,
-          billing_type:     form.billingType,
+          to_email: COMPANY_EMAIL,
+          member_name: form.memberName,
+          project: form.project,
+          task_duration: form.taskDuration,
+          status: form.status,
+          time_spent: form.timeSpent,
+          billing: form.billing,
+          billing_type: form.billingType,
           work_description: form.workDescription,
-          date:             form.date,
-          message:          messageBody,      // Default text variable
-          content:          base64Excel,      // Default attachment variable in EmailJS
+          date: form.date,
+          message: messageBody,      // Default text variable
+          content: base64Excel,      // Default attachment variable in EmailJS
         },
         EMAILJS_PUBLIC_KEY,
       );
@@ -185,10 +185,10 @@ ${form.workDescription}
     }
   };
 
-  const handleReset    = () => setForm(getInitialForm());
+  const handleReset = () => setForm(getInitialForm());
   const activeProjects = projects.map((p) => p.name);
-  const memberNames    = members.map((m) => m.name);
-  const selectedProj   = projects.find((p) => p.name === form.project);
+  const memberNames = members.map((m) => m.name);
+  const selectedProj = projects.find((p) => p.name === form.project);
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
@@ -249,11 +249,11 @@ ${form.workDescription}
             <span><strong>{selectedProj.name}</strong>{selectedProj.client ? ` · ${selectedProj.client}` : ''}</span>
             {selectedProj.billingRate > 0 && (
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                ₹{Number(selectedProj.billingRate).toLocaleString('en-IN')}/hr
+                $ {Number(selectedProj.billingRate).toLocaleString('en-IN')}/hr
               </span>
             )}
             {selectedProj.startDate && <span>📅 {format(new Date(selectedProj.startDate + 'T00:00:00'), 'dd MMM yyyy')}</span>}
-            {selectedProj.endDate   && <span>→ {format(new Date(selectedProj.endDate   + 'T00:00:00'), 'dd MMM yyyy')}</span>}
+            {selectedProj.endDate && <span>→ {format(new Date(selectedProj.endDate + 'T00:00:00'), 'dd MMM yyyy')}</span>}
           </div>
         )}
 
@@ -293,11 +293,11 @@ ${form.workDescription}
         {/* Row 3 — Billing Amount */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field
-            label="Billing Amount (₹)"
+            label="Billing Amount ($)"
             icon={DollarSign}
             hint={
               selectedProj?.billingRate > 0 && form.timeSpent
-                ? `Auto-calculated: ₹${selectedProj.billingRate}/hr × ${TIME_SPENT_HOURS[form.timeSpent] || 0}h`
+                ? `Auto-calculated: $${selectedProj.billingRate}/hr × ${TIME_SPENT_HOURS[form.timeSpent] || 0}h`
                 : 'Auto-fills when project & time are selected'
             }
           >
@@ -316,7 +316,7 @@ ${form.workDescription}
             <p className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-500 mb-1">Today's Date</p>
             <div className="rounded-xl px-4 py-3 w-full border transition-colors
               bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700">
-              
+
               <p className="text-sm font-semibold text-brand-600 dark:text-brand-400">
                 {format(new Date(), 'EEEE, dd MMMM yyyy')}
               </p>

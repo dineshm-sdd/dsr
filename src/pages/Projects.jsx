@@ -6,20 +6,20 @@ import CalendarPicker from '../components/UI/CalendarPicker';
 import { parseISO, format } from 'date-fns';
 import {
   FolderKanban, Plus, Pencil, Trash2, DollarSign,
-  Calendar, Building2, Search, CheckCircle2, Archive,
+  Calendar, Building2, Search, CheckCircle2, Archive, Users
 } from 'lucide-react';
 
 // ─── Helpers defined OUTSIDE component (fix focus-loss bug) ───────────────────
-const EMPTY = { name: '', client: '', billingRate: '', startDate: '', endDate: '', description: '', status: 'Active' };
+const EMPTY = { name: '', client: '', billingRate: '', fixedCost: '', pmName: '', bdgName: '', approvedHours: '', projectType: 'Billable', startDate: '', endDate: '', description: '', status: 'Active' };
 
 const STATUS_STYLES = {
-  Active:    'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700/40',
-  Archived:  'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-700/60 dark:text-slate-400 dark:border-slate-600',
+  Active: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700/40',
+  Archived: 'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-700/60 dark:text-slate-400 dark:border-slate-600',
   Completed: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-700/40',
 };
 
 const toDate = (s) => { try { return s ? parseISO(s) : null; } catch { return null; } };
-const toStr  = (d) => { try { return d ? format(d, 'yyyy-MM-dd') : ''; } catch { return ''; } };
+const toStr = (d) => { try { return d ? format(d, 'yyyy-MM-dd') : ''; } catch { return ''; } };
 const fmtDate = (s) => {
   try { return s ? format(new Date(s + 'T00:00:00'), 'dd MMM yyyy') : '—'; } catch { return '—'; }
 };
@@ -38,24 +38,29 @@ function Field({ label, icon: Icon, children }) {
 export default function Projects() {
   const { projects, addProject, updateProject, deleteProject } = useDSR();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editId,    setEditId]    = useState(null);
-  const [form,      setForm]      = useState(EMPTY);
-  const [search,    setSearch]    = useState('');
-  const [deleteId,  setDeleteId]  = useState(null);
-  const [saved,     setSaved]     = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState(EMPTY);
+  const [search, setSearch] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+  const [saved, setSaved] = useState(false);
 
   const set = (f) => (e) => setForm((p) => ({ ...p, [f]: e.target.value }));
 
-  const openAdd  = ()  => { setForm(EMPTY); setEditId(null); setModalOpen(true); setSaved(false); };
+  const openAdd = () => { setForm(EMPTY); setEditId(null); setModalOpen(true); setSaved(false); };
   const openEdit = (p) => {
     setForm({
-      name:        p.name        || '',
-      client:      p.client      || '',
+      name: p.name || '',
+      client: p.client || '',
       billingRate: String(p.billingRate ?? ''),
-      startDate:   p.startDate   || '',
-      endDate:     p.endDate     || '',
+      fixedCost: String(p.fixedCost ?? ''),
+      pmName: p.pmName || '',
+      bdgName: p.bdgName || '',
+      approvedHours: String(p.approvedHours ?? ''),
+      projectType: p.projectType || 'Billable',
+      startDate: p.startDate || '',
+      endDate: p.endDate || '',
       description: p.description || '',
-      status:      p.status      || 'Active',
+      status: p.status || 'Active',
     });
     setEditId(p.id);
     setModalOpen(true);
@@ -66,7 +71,7 @@ export default function Projects() {
   const handleSave = (e) => {
     e.preventDefault();
     if (!form.name.trim()) return;
-    const payload = { ...form, billingRate: parseFloat(form.billingRate) || 0 };
+    const payload = { ...form, billingRate: parseFloat(form.billingRate) || 0, fixedCost: parseFloat(form.fixedCost) || 0, approvedHours: parseFloat(form.approvedHours) || 0 };
     if (editId) {
       updateProject(editId, payload);
     } else {
@@ -87,7 +92,7 @@ export default function Projects() {
   );
 
   return (
-    <div className="animate-fade-in space-y-6">
+    <div className="animate-fade-in">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -105,7 +110,7 @@ export default function Projects() {
       </div>
 
       {/* Search */}
-      <div className="card p-4">
+      <div className="card p-4 my-6">
         <div className="relative max-w-sm">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
@@ -155,7 +160,7 @@ export default function Projects() {
                     </td>
                     <td className="td">
                       {p.billingRate > 0
-                        ? <span className="font-semibold text-emerald-600 dark:text-emerald-400">₹{Number(p.billingRate).toLocaleString('en-IN')}/hr</span>
+                        ? <span className="font-semibold text-emerald-600 dark:text-emerald-400">${Number(p.billingRate).toLocaleString('en-IN')}/hr</span>
                         : <span className="text-slate-400">—</span>
                       }
                     </td>
@@ -169,7 +174,7 @@ export default function Projects() {
                     </td>
                     <td className="td">
                       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity justify-end">
-                        <button onClick={() => openEdit(p)} className="btn-icon" title="Edit">
+                        <button onClick={() => openEdit(p)} className="btn-icon text-amber-600 hover:bg-amber-50 dark:text-amber-500 dark:hover:bg-amber-900/20" title="Edit">
                           <Pencil size={14} />
                         </button>
                         <button
@@ -219,17 +224,68 @@ export default function Projects() {
               />
             </Field>
 
-            <Field label="Billing Rate (₹/hr)" icon={DollarSign}>
+            <Field label="Project Manager Name" icon={Users}>
+              <input
+                className="input-field"
+                placeholder="e.g. John Doe"
+                value={form.pmName}
+                onChange={set('pmName')}
+              />
+            </Field>
+
+            <Field label="BDG Person Name" icon={Users}>
+              <input
+                className="input-field"
+                placeholder="e.g. Jane Smith"
+                value={form.bdgName}
+                onChange={set('bdgName')}
+              />
+            </Field>
+
+            <Field label="Approved Hours" icon={Calendar}>
               <input
                 className="input-field"
                 type="number"
                 min="0"
-                step="0.01"
-                placeholder="e.g. 1500"
-                value={form.billingRate}
-                onChange={set('billingRate')}
+                step="0.5"
+                placeholder="e.g. 100"
+                value={form.approvedHours}
+                onChange={set('approvedHours')}
               />
             </Field>
+
+            <Field label="Project Type" icon={DollarSign}>
+              <select className="input-field" value={form.projectType} onChange={set('projectType')}>
+                <option value="Billable">Billable</option>
+                <option value="Fixed">Fixed</option>
+              </select>
+            </Field>
+
+            {form.projectType === 'Fixed' ? (
+              <Field label="Fixed Cost ($)" icon={DollarSign}>
+                <input
+                  className="input-field"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 5000"
+                  value={form.fixedCost}
+                  onChange={set('fixedCost')}
+                />
+              </Field>
+            ) : (
+              <Field label="Billing Rate ($/hr)" icon={DollarSign}>
+                <input
+                  className="input-field"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 1500"
+                  value={form.billingRate}
+                  onChange={set('billingRate')}
+                />
+              </Field>
+            )}
 
             <Field label="Status" icon={CheckCircle2}>
               <select className="input-field" value={form.status} onChange={set('status')}>
@@ -239,8 +295,7 @@ export default function Projects() {
               </select>
             </Field>
 
-            {/* Start Date — CalendarPicker (not causing focus issues as it's not a text input) */}
-            <div>
+            <div className='grid'>
               <label className="label"><Calendar size={12} className="text-brand-500" />Start Date</label>
               <CalendarPicker
                 selected={toDate(form.startDate)}
@@ -249,7 +304,7 @@ export default function Projects() {
               />
             </div>
 
-            <div>
+            <div className='grid'>
               <label className="label"><Calendar size={12} className="text-brand-500" />End Date</label>
               <CalendarPicker
                 selected={toDate(form.endDate)}
@@ -260,15 +315,17 @@ export default function Projects() {
             </div>
           </div>
 
-          <Field label="Description" icon={FolderKanban}>
-            <textarea
-              className="input-field resize-none"
-              rows={3}
-              placeholder="Brief project description..."
-              value={form.description}
-              onChange={set('description')}
-            />
-          </Field>
+          <div className='grid'>
+            <Field label="Description" icon={FolderKanban}>
+              <textarea
+                className="input-field resize-none"
+                rows={3}
+                placeholder="Brief project description..."
+                value={form.description}
+                onChange={set('description')}
+              />
+            </Field>
+          </div>
 
           <div className="flex justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-700/50">
             <button type="button" onClick={close} className="btn-secondary">Cancel</button>

@@ -189,6 +189,15 @@
       "department": "Engineering",
       "id": "ogmPMg7-iHU",
       "createdAt": "2026-06-16T09:57:23.123Z"
+    },
+    {
+      "name": "Gurmail Singh",
+      "email": "gurmailsingh@smartdatainc.net",
+      "password": "12345678",
+      "role": "Designer",
+      "department": "Engineering",
+      "id": "1y2EoFT9cNM",
+      "createdAt": "2026-06-17T05:01:53.954Z"
     }
   ],
   "users": [

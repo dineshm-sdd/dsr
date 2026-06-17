@@ -39,6 +39,7 @@ export default function CalendarPicker({ selected, onChange, placeholder, maxDat
       showYearDropdown
       dropdownMode="select"
       popperPlacement="bottom-start"
+      portalId="root"
     />
   );
 }
