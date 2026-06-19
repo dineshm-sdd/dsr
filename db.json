@@ -129,7 +129,19 @@
       "description": "HealthCare",
       "status": "Active",
       "id": "oUhlKZKsFyw",
-      "createdAt": "2026-06-15T12:50:06.329Z"
+      "createdAt": "2026-06-15T12:50:06.329Z",
+      "updatedAt": "2026-06-16T11:56:46.551Z"
+    },
+    {
+      "name": "Verkiclick",
+      "client": "",
+      "billingRate": 0,
+      "startDate": "",
+      "endDate": "",
+      "description": "",
+      "status": "Active",
+      "id": "1mo77hhVJhs",
+      "createdAt": "2026-06-16T10:30:15.228Z"
     }
   ],
   "members": [
