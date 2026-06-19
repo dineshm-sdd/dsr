@@ -14,6 +14,7 @@ import {
   STATUSES, BILLING_TYPES, TIME_SPENT_OPTIONS, TIME_SPENT_HOURS,
   EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, COMPANY_EMAIL,
 } from '../data/constants';
+import moment from 'moment';
 
 // ─── Field wrapper defined OUTSIDE the component to prevent focus-loss on re-render ──
 function Field({ label, icon: Icon, required, children, hint }) {
@@ -50,6 +51,17 @@ const EMPTY = {
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function DSRForm() {
   const { addEntry, projects, members } = useDSR();
+   const [dateTime, setDateTime] = useState(
+    moment().format("MMMM Do YYYY, h:mm:ss a")
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDateTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []); // ✅ empty dependency
 
   const getInitialForm = () => {
     const defaultForm = { ...EMPTY, date: toStr(todayDate()) };
@@ -189,13 +201,15 @@ ${form.workDescription}
   const activeProjects = projects.map((p) => p.name);
   const memberNames = members.map((m) => m.name);
   const selectedProj = projects.find((p) => p.name === form.project);
-
+  console.log(dateTime)
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in">
+    <div className="max-w-full mx-auto animate-fade-in">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       {/* Page Header */}
+      <div className=" flex items-center justify-between gap-3">
       <div className="mb-8 flex items-center gap-3">
+        
         <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg shadow-brand-900/20">
           <Send size={18} className="text-white" />
         </div>
@@ -204,7 +218,9 @@ ${form.workDescription}
           <p className="text-sm text-slate-500">Fill in your task details for the day</p>
         </div>
       </div>
+        {dateTime}
 
+</div>
       <form onSubmit={handleSubmit} className="card animate-slide-up space-y-6">
 
         {/* Row 1 — Member | Project | Report Date */}
