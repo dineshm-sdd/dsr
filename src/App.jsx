@@ -10,18 +10,19 @@ import Projects from './pages/Projects';
 import Login from './pages/Login';
 import { DSRProvider } from './context/DSRContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { PrivateRoute } from './utils/PrivateRoute';
 
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-};
+// const ProtectedRoute = ({ children }) => {
+//   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+//   return isAuthenticated ? children : <Navigate to="/login" replace />;
+// };
 
 const Layout = ({ children }) => (
-  <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+  <div className=" min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
     <Header />
+    <main className="w-full flex   h-[calc(100vh-105px)] overflow-hidden">
     <Sidebar />
-    <main className="flex-1 p-6 lg:p-8 lg:pt-28 pt-28 overflow-auto min-w-0">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full mx-auto py-6 flex-1 px-4 sm:px-6 lg:px-8 max-w-full overflow-auto">
         {children}
       </div>
     </main>
@@ -35,11 +36,13 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<ProtectedRoute><Layout><DSRForm /></Layout></ProtectedRoute>} />
-            <Route path="/records" element={<ProtectedRoute><Layout><DSRRecords /></Layout></ProtectedRoute>} />
-            <Route path="/analysis" element={<ProtectedRoute><Layout><ProjectAnalysis /></Layout></ProtectedRoute>} />
-            <Route path="/projects" element={<ProtectedRoute><Layout><Projects /></Layout></ProtectedRoute>} />
-            <Route path="/members" element={<ProtectedRoute><Layout><TeamMembers /></Layout></ProtectedRoute>} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Layout><DSRForm /></Layout>} />
+              <Route path="/records" element={<Layout><DSRRecords /></Layout>} />
+              <Route path="/analysis" element={<Layout><ProjectAnalysis /></Layout>} />
+              <Route path="/projects" element={<Layout><Projects /></Layout>} />
+              <Route path="/members" element={<Layout><TeamMembers /></Layout>} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </DSRProvider>

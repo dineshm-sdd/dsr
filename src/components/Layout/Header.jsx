@@ -11,12 +11,12 @@ export default function Header() {
     <>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+      <header className=" top-0 left-0 right-0 z-40 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="flex items-center justify-between px-4 sm:px-6 py-3">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="SmartData" className="h-12 w-auto object-contain max-w-[200px]" />
+            <img src="/logo.png" alt="SmartData" className="h-20 w-auto object-contain max-w-[200px]" />
             <div className="hidden sm:block">
-              <p className="text-lg text-slate-800 font-bold dark:text-white tracking-wide">DSR Portal</p>
+              {/* <p className="text-lg text-slate-800 font-bold dark:text-white tracking-wide">DSR Portal</p> */}
             </div>
           </div>
           

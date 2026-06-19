@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, LogIn, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import db from '../../db.json';
+  import { ToastContainer, toast } from 'react-toastify';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { theme } = useTheme();
-
+  const [errors ,setErrors] = useState()
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -24,7 +25,10 @@ export default function Login() {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify(users[0]));
         window.dispatchEvent(new Event('userLogin'));
+              toast.success('Logged in successfully (local fallback)');
+      setTimeout(() => {
         navigate('/');
+      }, 500);
       } else {
         const memberRes = await fetch(`http://localhost:3001/members?email=${email}&password=${password}`);
         const members = await memberRes.json();
@@ -33,9 +37,11 @@ export default function Login() {
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('user', JSON.stringify(members[0]));
           window.dispatchEvent(new Event('userLogin'));
+             toast.success('Logged in successfully (local fallback)');
+      setTimeout(() => {
         navigate('/');
+      }, 500);
         } else {
-          // Check local db.json just in case json-server is running but out of sync
           checkLocalFallback();
         }
       }
@@ -44,31 +50,57 @@ export default function Login() {
       checkLocalFallback();
     }
   };
+  const seterrorFeilds = (email, password) => {
+    const newErrors = {
+      email : '',
+      passsword:''
+    }
+    if(email === ''){
+      newErrors.email = 'Email is required'
+    }
+    else if(!/\S+@\S+\.\S+/.test(email)){
+      newErrors.email = 'Email is invalid'
+    }
+    if(password === ''){
+      newErrors.password = 'Password is required'
+    }
+    setErrors(newErrors);
+  }
 
   const checkLocalFallback = () => {
     const member = db.members?.find(m => m.email === email && m.password === password);
     const user = db.users?.find(u => u.email === email && u.password === password);
-
+    seterrorFeilds(email,password)
+    console.log(errors)
     if (user) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ name: 'Admin User', designation: 'Administrator', email: user.email, role: 'admin' }));
       window.dispatchEvent(new Event('userLogin'));
-      navigate('/');
+      toast.success('Logged in successfully (local fallback)');
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
     } else if (member) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ name: member.name, designation: member.role || 'Member', email: member.email, role: member.role }));
       window.dispatchEvent(new Event('userLogin'));
-      navigate('/');
+      toast.success('Logged in successfully (local fallback)');
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
     } else {
-      setError('Invalid email or password.');
+      toast.error('Invalid email or password.');
     }
   };
 
   const handleForgotPassword = () => {
-    alert("Forgot password functionality will send an email reset link to " + (email || "your email."));
+    // alert("Forgot password functionality will send an email reset link to " + (email || "your email."));
+    toast.info("Forgot password functionality will send an email reset link to " + (email || "your email."));
   };
 
   return (
+    <>
+    <ToastContainer />
     <div className={`min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-200 p-4`}>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 animate-fade-in">
         <div className="p-8">
@@ -78,11 +110,11 @@ export default function Login() {
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Please sign in to your account</p>
           </div>
 
-          {error && (
+          {/* {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center text-red-600 dark:text-red-400 text-sm animate-scale-in">
               <span className="flex-1">{error}</span>
             </div>
-          )}
+          )} */}
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
@@ -93,13 +125,13 @@ export default function Login() {
                 </div>
                 <input
                   type="email"
-                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all sm:text-sm"
                   placeholder="admin@smartdata.com"
                 />
               </div>
+              <p className="text-red-500 text-sm mt-1">{errors?.email}</p>
             </div>
 
             <div>
@@ -110,7 +142,6 @@ export default function Login() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all sm:text-sm"
@@ -127,6 +158,8 @@ export default function Login() {
                     <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                   )}
                 </button>
+              <p className="text-red-500 text-sm mt-1">{errors?.password}</p>
+
               </div>
               <div className="flex justify-end mt-2">
                 <button
@@ -150,5 +183,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }
