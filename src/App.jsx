@@ -10,18 +10,21 @@ import Projects from "./pages/Projects";
 import Login from "./pages/Login";
 import { DSRProvider } from "./context/DSRContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { PrivateRoute } from "./utils/PrivateRoute";
 
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-};
+// const ProtectedRoute = ({ children }) => {
+//   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+//   return isAuthenticated ? children : <Navigate to="/login" replace />;
+// };
 
 const Layout = ({ children }) => (
-  <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+  <div className=" min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
     <Header />
-    <Sidebar />
-    <main className="flex-1 p-6 lg:p-8 lg:pt-28 pt-28 overflow-auto min-w-0">
-      <div className="max-w-7xl mx-auto">{children}</div>
+    <main className="w-full flex   h-[calc(100vh-105px)] overflow-hidden">
+      <Sidebar />
+      <div className="w-full mx-auto py-6 flex-1 px-5 max-w-full overflow-auto">
+        {children}
+      </div>
     </main>
   </div>
 );
@@ -33,56 +36,48 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
+            <Route element={<PrivateRoute />}>
+              <Route
+                path="/"
+                element={
                   <Layout>
                     <DSRForm />
                   </Layout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/records"
-              element={
-                <ProtectedRoute>
+                }
+              />
+              <Route
+                path="/records"
+                element={
                   <Layout>
                     <DSRRecords />
                   </Layout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/analysis"
-              element={
-                <ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analysis"
+                element={
                   <Layout>
                     <ProjectAnalysis />
                   </Layout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/projects"
-              element={
-                <ProtectedRoute>
+                }
+              />
+              <Route
+                path="/projects"
+                element={
                   <Layout>
                     <Projects />
                   </Layout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/members"
-              element={
-                <ProtectedRoute>
+                }
+              />
+              <Route
+                path="/members"
+                element={
                   <Layout>
                     <TeamMembers />
                   </Layout>
-                </ProtectedRoute>
-              }
-            />
+                }
+              />
+            </Route>
           </Routes>
         </BrowserRouter>
       </DSRProvider>
