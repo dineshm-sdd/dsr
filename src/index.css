@@ -1,17 +1,84 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-@import 'react-datepicker/dist/react-datepicker.css';
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
 
+/* Theme tokens */
+@theme {
+  /* Font */
+  --font-poppins: "Poppins", sans-serif;
+
+  /* Brand Colors */
+  --color-brand-50: #fdf2f2;
+  --color-brand-100: #fbe5e5;
+  --color-brand-200: #f6cdcd;
+  --color-brand-300: #f0aaaa;
+  --color-brand-400: #e57b7b;
+  --color-brand-500: #db252c;
+  --color-brand-600: #c51d23;
+  --color-brand-700: #a5151a;
+  --color-brand-800: #891418;
+  --color-brand-900: #73171a;
+  --color-brand-950: #3e0809;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.25s ease-out;
+  --animate-slide-up: slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down: slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scale-in 0.2s ease-out;
+}
+/* Keyframes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* ── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
-  * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
   body {
-    @apply font-sans antialiased transition-colors duration-200;
     @apply bg-slate-50 text-slate-900;
+    font-family: var(--font-poppins);
   }
   .dark body,
   :root:has(.dark) body {
@@ -25,14 +92,20 @@
     @apply bg-slate-950;
   }
 
-  ::-webkit-scrollbar       { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { @apply bg-transparent; }
-  ::-webkit-scrollbar-thumb { @apply bg-brand-600/50 rounded-full; }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-600/50 rounded-full;
+  }
 }
 
 /* ── Components ────────────────────────────────────────────────────────────── */
 @layer components {
-
   /* Glass – dark mode cards */
   .glass {
     @apply bg-white/5 backdrop-blur-xl border border-white/10;
@@ -176,7 +249,7 @@
 
 /* ── React-Datepicker custom theme ─────────────────────────────────────────── */
 .react-datepicker {
-  @apply border-0 shadow-2xl rounded-2xl overflow-hidden font-sans;
+  @apply border-0 shadow-2xl rounded-2xl overflow-hidden;
   @apply bg-white border border-slate-200;
 }
 .dark .react-datepicker {
@@ -235,6 +308,12 @@
 .react-datepicker__navigation-icon::before {
   @apply border-slate-500;
 }
-.react-datepicker__triangle { display: none; }
-.react-datepicker-popper { z-index: 9999 !important; }
-.react-datepicker__input-container input { width: 100%; }
+.react-datepicker__triangle {
+  display: none;
+}
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+.react-datepicker__input-container input {
+  width: 100%;
+}
