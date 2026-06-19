@@ -50,14 +50,14 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 z-50 lg:z-auto h-screen w-64
+        fixed lg:sticky top-0 left-0 z-50 lg:z-auto  w-64
         sidebar-bg flex flex-col transition-transform duration-300 ease-in-out
         ${open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
       
       
         {/* Nav */}
-        <nav className="flex-1 px-3 py-4 pt-24 flex flex-col gap-1 overflow-y-auto">
+        <nav className="flex-1 px-3 py-4  flex flex-col gap-1 overflow-y-auto">
           {NAV.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
